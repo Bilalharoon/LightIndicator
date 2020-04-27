@@ -2,14 +2,126 @@
 <html>
 	<head></head>
 	<body>
-		<h1>Hello World</h1>
-		<h2>Test</h2>
-		<form action="/led" method="POST">		
-			<input type="checkbox" id="checkbox" name="led"/>
-			<label for="checkbox">Light On</label>
-			<input type="submit" value="submit"/>
+		<form action="/led" method="POST", name="light">		
+			
+			<label class="container">Come In
+			<input type="radio" name="lightSelector" id="green" value="green">
+			<span class="checkmark" id="green"></span>
+			</label>
+			
+			<label class="container"> Come In Quietly
+			<input type="radio" name="lightSelector" id="yellow" value="yellow">
+			<span class="checkmark" id="yellow"></span>
+			</label>
+
+			<label class="container"> Stay Out
+			<input type="radio" name="lightSelector" id="red" value="red">
+			<span class="checkmark" id="red"></span>
+			</label>
 		</form>
+		<style>
+/* The container */
+
+
+form{
+	width:100vw;
+	height:100vh;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	flex-direction:column;
+}
+.container {
+	width: 100px;
+	display: block;
+	position: relative;
+	padding-left: 35px;
+	margin-bottom: 45px;
+	cursor: pointer;
+	font-size: 22px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container input {
+	 position: absolute;
+	 opacity: 0;
+	 cursor: pointer;
+			}
+/* Create a custom radio button */
+.checkmark {
+	position: absolute;
+	top: -10px;
+	left: -30px;
+	height: 50px;
+	width: 50px;
+	background-color: #eee;
+	border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+	background-color: #ccc;
+}
+
+/* When the radio button is checked, add a background */
+.container input:checked ~ #green{
+	background-color: green;
+}
+.container input:checked ~ #yellow{
+	background-color: gold;
+}
+.container input:checked ~ #red{
+	background-color: red;
+}
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+	}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked ~ .checkmark:after {
+	display: block;
+}
+
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+	top: 20px;
+	left: 20px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+
+@media all and (max-width:400px){
+	.container{
+		font-size: 20pt;
+
+	}
+}
+		</style>
 		<script>
+			const lightForm = document.light.lightSelector;
+			for(var i = 0; i<lightForm.length; i++){
+				lightForm[i].addEventListener("click", function(event){
+					const http = new XMLHttpRequest();
+					http.open("POST", "/led", true);
+					
+					http.setRequestHeader(
+					"Content-type", 
+					"application/x-www-form-urlencoded"
+					);
+					
+					http.send("light-selector=" + event.target.value)
+				})
+			}
 		</script>
 	</body>
 
